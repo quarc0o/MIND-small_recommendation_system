@@ -1,11 +1,11 @@
 import pandas as pd
-print(pd.__version__)
 
 # Load the DataFrame
 train_df = pd.read_csv('data/training/behaviors.tsv', delimiter='\t', header=None)
-validation_df = pd.read_csv('data/validation/behaviors.tsv', delimiter='\t', header=None)
 
-
+# Filter away articles before a certain date
+train_df[2] = pd.to_datetime(train_df[2])
+train_df = train_df.loc[train_df[2] >= pd.Timestamp('2019-11-14')]
 
 impression_log_col = train_df.iloc[:, -1]
 
@@ -26,5 +26,7 @@ for impression_data in impression_log_col:
 
 sorted_articles_clicks = sorted(articles_click_count.items(), key=lambda x: x[1], reverse=True)
 
-for article_id, count in sorted_articles_clicks[:5]:
-    print(f"Article {article_id} was clicked {count} times.")
+with open('models/baseline/most_popular_articles.txt', 'w') as file:
+  for article_id, count in sorted_articles_clicks[:10]:
+      print(f"Article {article_id} was clicked {count} times.")
+      file.write(f"{article_id}\n")
