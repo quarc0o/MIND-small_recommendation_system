@@ -26,7 +26,7 @@ for impression_data in impression_log_col:
 
 sorted_articles_clicks = sorted(articles_click_count.items(), key=lambda x: x[1], reverse=True)
 
-with open('models/baseline/most_popular_articles.txt', 'w') as file:
+with open('output/most_popular_articles.txt', 'w') as file:
   for article_id, count in sorted_articles_clicks[:10]:
       print(f"Article {article_id} was clicked {count} times.")
       file.write(f"{article_id}\n")

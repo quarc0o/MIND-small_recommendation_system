@@ -9,6 +9,7 @@ from itertools import combinations
 import pandas as pd
 import numpy as np
 import random
+import pickle
 
 document_list = dict()
 
@@ -107,6 +108,24 @@ def get_similar_docs(buckets, doc_ids):
     return similar_docs
 
 
+def recommend_similar_docs(given_doc_id, buckets, doc_ids):
+    # Find the buckets the given document is in
+    bucket_keys = [bucket for bucket, docs in buckets.items() if given_doc_id in [doc_ids[idx] for idx in docs]]
+    
+    # Collect all unique document IDs from these buckets
+    recommended_doc_ids = set()
+    for key in bucket_keys:
+        recommended_doc_ids.update([doc_ids[idx] for idx in buckets[key]])
+    
+    # Remove the given document from recommendations
+    recommended_doc_ids.discard(given_doc_id)
+    
+    return list(recommended_doc_ids)
+
+
+
+
+
 
 if __name__ == '__main__':
     print("Starting to create all k-shingles of the documents...")
@@ -127,3 +146,14 @@ if __name__ == '__main__':
     print(f"Found {len(similar_docs)} document pairs with similarity >= {0.6}")
     for doc1, doc2, sim in similar_docs:
         print(f"Doc {doc1} and Doc {doc2} have similarity {sim:.2f}")
+
+    def save_buckets(buckets, filename="output/lsh_buckets.pkl"):
+        with open(filename, "wb") as file:
+            pickle.dump(buckets, file)
+        print(f"Buckets saved to {filename}")
+    
+    save_buckets(buckets)
+
+
+
+

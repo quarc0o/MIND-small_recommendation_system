@@ -6,7 +6,7 @@ validation_df = pd.read_csv('data/validation/behaviors.tsv', delimiter='\t', hea
 impression_log_col = validation_df.iloc[:, -1]
 
 # Load the list of most popular articles
-with open('models/baseline/most_popular_articles.txt', 'r') as file:
+with open('output/most_popular_articles.txt', 'r') as file:
     popular_articles = [line.strip() for line in file.readlines()]
 
 
